@@ -2,7 +2,15 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect
 from .models import City, Space, SpaceImage
 from .forms import SelectSpaces
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+
+
+def get_side_objects():
+    popular_spaces = Space.objects.all().order_by('-views')[:2]
+    form = SelectSpaces()
+    cities = City.objects.all()
+    return popular_spaces, form, cities
+
 
 
 def filter_spaces(spaces, post):
@@ -28,24 +36,24 @@ def filter_spaces(spaces, post):
 
 def index(request):
     spaces = Space.objects.all().order_by('-views')
-    popular_spaces = Space.objects.all().order_by('-views')[:2]
     if request.method == 'POST':
         spaces = filter_spaces(spaces, request.POST)
-    form = SelectSpaces()
-    cities = City.objects.all()
 
-    photos = SpaceImage.objects.filter(space=1)
+    popular_spaces, form, cities = get_side_objects()
     context = {'form': form,
                'cities': cities,
                'spaces': spaces,
-               'photos': photos,
                'popular_spaces': popular_spaces,
                }
     return render(request, template_name='arenda_app/index.html', context=context)
 
 
-def show_spaces(request):
-    old_post = request.session.get('_old_post')
-    if old_post['rent_type'] == 'Посуточно':
-        spaces = Space.objects.filter(hour_price__gte=old_post['price_from'])
-    return HttpResponse(content=spaces[0].month_price)
+def space_detail(request, space_id):
+    space = get_object_or_404(Space, id=space_id)
+    popular_spaces, form, cities = get_side_objects()
+    context = {'form': form,
+               'cities': cities,
+               'space': space,
+               'popular_spaces': popular_spaces,
+               }
+    return render(request, template_name='arenda_app/single.html', context=context)

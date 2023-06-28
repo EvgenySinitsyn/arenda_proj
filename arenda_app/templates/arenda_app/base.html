@@ -67,17 +67,17 @@
         <section class="ftco-section ftco-no-pt ftco-no-pb">
             <div class="container">
                 <div class="row d-flex">
-                    <div class="col-xl-8 py-5 px-md-5">
 
-                        {% block content %}{% endblock content %}
 
-                    </div>
+                    {% block content %}{% endblock content %}
+
+
                     <div class="col-xl-4 sidebar ftco-animate bg-light pt-5">
                         <div class="sidebar-box pt-md-4">
                             <form method="post">
                                 {% csrf_token %}
                                 {{ form.as_p }}
-                                <button type="submit">Выбрать</button>
+                                <button type="submit"><a href="{% url 'index' %}">Выбрать</a></button>
                             </form>
 
                             <datalist id="cities">
@@ -95,10 +95,11 @@
                                 <a class="blog-img mr-4"
                                    style="background-image: url({{ space.poster.url }});"></a>
                                 <div class="text">
-                                    <h3 class="heading"><a href="#">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</a>
+                                    <h3 class="heading"><a href="{% url 'space_detail' space_id=space.id %}">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</a>
                                     </h3>
                                     <div class="meta">
-                                        <div><a href="#"><span class="icon-calendar"></span> {{ space.created_tm }}</a>
+                                        <div><a href="{% url 'space_detail' space_id=space.id %}"><span
+                                                class="icon-calendar"></span> {{ space.created_tm }}</a>
                                         </div>
                                         <div><a href="#"><span class="icon-person"></span> {{ space.owner.first_name }}
                                             {{ space.owner.last_name }}</a></div>

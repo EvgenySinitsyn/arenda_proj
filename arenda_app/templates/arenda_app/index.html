@@ -3,29 +3,30 @@
 {% load static %}
 
 {% block content %}
+<div class="col-xl-8 py-5 px-md-5">
 <div class="row pt-md-4">
-{% for space in spaces %}
-<div class="col-md-12">
-    <div class="blog-entry ftco-animate d-md-flex">
-        <a href="single.html" class="img img-2"
-           style="background-image: url({{ space.poster.url }});"></a>
-        <div class="text text-2 pl-md-4">
-            <h3 class="mb-2"><a href="single.html">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</a>
-            </h3>
-            <div class="meta-wrap">
-                <p class="meta">
-                    <span><i class="icon-calendar mr-2"></i>{{ space.created_tm }}</span>
-                    <span><a href="single.html"><i class="icon-folder-o mr-2"></i>{{ space.type.name }}</a></span>
-                    <span><i class="icon-eye mr-2"></i>{{ space.views }} просмотров</span>
-                </p>
+    {% for space in spaces %}
+    <div class="col-md-12">
+        <div class="blog-entry ftco-animate d-md-flex">
+            <a href="{% url 'space_detail' space_id=space.id %}" class="img img-2"
+               style="background-image: url({{ space.poster.url }});"></a>
+            <div class="text text-2 pl-md-4">
+                <h3 class="mb-2"><a href="{% url 'space_detail' space_id=space.id %}">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</a>
+                </h3>
+                <div class="meta-wrap">
+                    <p class="meta">
+                        <span><i class="icon-calendar mr-2"></i>{{ space.created_tm }}</span>
+                        <span><a href="{% url 'space_detail' space_id=space.id %}"><i class="icon-folder-o mr-2"></i>{{ space.type.name }}</a></span>
+                        <span><i class="icon-eye mr-2"></i>{{ space.views }} просмотров</span>
+                    </p>
+                </div>
+                <p class="mb-4">{{ space.description }}</p>
+                <p><a href="#" class="btn-custom">Посмотреть подробнее <span
+                        class="ion-ios-arrow-forward"></span></a></p>
             </div>
-            <p class="mb-4">{{ space.description }}</p>
-            <p><a href="#" class="btn-custom">Посмотреть подробнее <span
-                    class="ion-ios-arrow-forward"></span></a></p>
         </div>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
 </div><!-- END-->
 <div class="row">
     <div class="col">
@@ -42,5 +43,5 @@
         </div>
     </div>
 </div>
-
+</div>
 {% endblock %}
