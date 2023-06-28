@@ -81,7 +81,7 @@ class Space(models.Model):
 
 
 class SpaceImage(models.Model):
-    space = models.ForeignKey(Space, default=None, on_delete=models.CASCADE)
+    space = models.ForeignKey(Space, default=None, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='images/')
 
     def __str__(self):

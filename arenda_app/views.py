@@ -1,4 +1,5 @@
 from django.db.models.functions import Coalesce
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import City, Space, SpaceImage
 from .forms import SelectSpaces
@@ -36,9 +37,12 @@ def filter_spaces(spaces, post):
 
 def index(request):
     spaces = Space.objects.all().order_by('-views')
+    old_post = request.session.get('_old_post')
+    if old_post:
+        spaces = filter_spaces(spaces, old_post)
+        request.session['_old_post'] = None
     if request.method == 'POST':
         spaces = filter_spaces(spaces, request.POST)
-
     popular_spaces, form, cities = get_side_objects()
     context = {'form': form,
                'cities': cities,
@@ -49,11 +53,16 @@ def index(request):
 
 
 def space_detail(request, space_id):
-    space = get_object_or_404(Space, id=space_id)
     popular_spaces, form, cities = get_side_objects()
+    if request.method == 'GET':
+        space = get_object_or_404(Space, id=space_id)
+    if request.method == 'POST':
+        request.session['_old_post'] = request.POST
+        return redirect('index')
     context = {'form': form,
                'cities': cities,
                'space': space,
+               'images': space.images.all(),
                'popular_spaces': popular_spaces,
                }
     return render(request, template_name='arenda_app/single.html', context=context)
