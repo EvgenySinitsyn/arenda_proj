@@ -6,12 +6,19 @@ from .forms import SelectSpaces
 from django.shortcuts import get_object_or_404
 
 
+PAGE_LIMIT = 3
+
+
+def clear_post(request):
+    request.session['_old_post'] = None
+    return redirect('index')
+
+
 def get_side_objects():
     popular_spaces = Space.objects.all().order_by('-views')[:2]
     form = SelectSpaces()
     cities = City.objects.all()
     return popular_spaces, form, cities
-
 
 
 def filter_spaces(spaces, post):
@@ -35,19 +42,25 @@ def filter_spaces(spaces, post):
     return spaces
 
 
-def index(request):
+def index(request, page=1):
+    popular_spaces, form, cities = get_side_objects()
     spaces = Space.objects.all().order_by('-views')
+    if request.method == 'POST':
+        request.session['_old_post'] = request.POST
+        return redirect('index')
     old_post = request.session.get('_old_post')
     if old_post:
         spaces = filter_spaces(spaces, old_post)
-        request.session['_old_post'] = None
-    if request.method == 'POST':
-        spaces = filter_spaces(spaces, request.POST)
-    popular_spaces, form, cities = get_side_objects()
+        form = SelectSpaces(old_post)
+
+    page_spaces = spaces[(page-1) * PAGE_LIMIT:((page-1) * PAGE_LIMIT) + PAGE_LIMIT]
+    page_count = len(spaces) // PAGE_LIMIT + 1
     context = {'form': form,
                'cities': cities,
-               'spaces': spaces,
+               'spaces': page_spaces,
                'popular_spaces': popular_spaces,
+               'page_count': range(1, page_count + 1),
+               'current_page': page,
                }
     return render(request, template_name='arenda_app/index.html', context=context)
 
@@ -56,9 +69,9 @@ def space_detail(request, space_id):
     popular_spaces, form, cities = get_side_objects()
     if request.method == 'GET':
         space = get_object_or_404(Space, id=space_id)
-    if request.method == 'POST':
-        request.session['_old_post'] = request.POST
-        return redirect('index')
+        space.views += 1
+        space.save()
+
     context = {'form': form,
                'cities': cities,
                'space': space,

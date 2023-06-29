@@ -9,10 +9,12 @@
     <div class="col-md-12">
         <div class="blog-entry ftco-animate d-md-flex">
             <a href="{% url 'space_detail' space_id=space.id %}" class="img img-2"
-               style="background-image: url({{ space.poster.url }});"></a>
+               style="background-image: url({{ space.images.all.first.image.url }});"></a>
             <div class="text text-2 pl-md-4">
                 <h3 class="mb-2"><a href="{% url 'space_detail' space_id=space.id %}">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</a>
                 </h3>
+                <h5>Тип аренды: {{ space.rent_type.name }}</h5>
+                <h5>Цена: {% if space.rent_type.name == 'Помесячно' %} {{ space.month_price }} {% else %} {{ space.day_price }} {% endif %} рублей</h5>
                 <div class="meta-wrap">
                     <p class="meta">
                         <span><i class="icon-calendar mr-2"></i>{{ space.created_tm }}</span>
@@ -21,7 +23,7 @@
                     </p>
                 </div>
                 <p class="mb-4">{{ space.description }}</p>
-                <p><a href="#" class="btn-custom">Посмотреть подробнее <span
+                <p><a href="{% url 'space_detail' space_id=space.id %}" class="btn-custom">Посмотреть подробнее <span
                         class="ion-ios-arrow-forward"></span></a></p>
             </div>
         </div>
@@ -32,13 +34,14 @@
     <div class="col">
         <div class="block-27">
             <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
+                {% for page in page_count %}
+                {% if page == current_page %}
+                    <li class="active"><span>{{ page }}</span></li>
+                {% else %}
+                    <li><a href="{% url 'index' page=page %}">{{ page }}</a></li>
+                {% endif %}
+                {% endfor %}
+
             </ul>
         </div>
     </div>
