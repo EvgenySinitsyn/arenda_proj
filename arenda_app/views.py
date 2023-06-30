@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout
 from .models import City, Space, User
 from django.contrib.auth.views import LoginView
 from .forms import SelectSpaces, RegisterUserForm, LoginUserForm
 from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 
 PAGE_LIMIT = 8
@@ -70,6 +72,7 @@ def index(request, page=1):
     return render(request, template_name='arenda_app/index.html', context=context)
 
 
+@login_required(login_url='login')
 def space_detail(request, space_id):
     if request.method == 'POST':
         request.session['_old_post'] = request.POST
@@ -138,3 +141,8 @@ class LoginUser(LoginView):
         context = super().get_context_data()
         context = {**context, **get_side_context()}
         return context
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('index')
