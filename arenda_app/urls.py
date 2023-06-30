@@ -9,4 +9,6 @@ urlpatterns = [
     path('spaces/<int:space_id>', views.space_detail, name='space_detail'),
     path('about', views.about, name='about'),
     path('contacts', views.contacts, name='contacts'),
+    path('register', views.RegisterUserView.as_view(), name='register'),
+    path('login', views.LoginUser.as_view(), name='login'),
 ]

@@ -54,13 +54,15 @@
         <nav id="colorlib-main-menu" role="navigation">
             <ul>
                 <li {% block home %}{% endblock home %}><a href="{% url 'clear_post' %}">Главная</a></li>
+                <li {% block login %}{% endblock login %}><a href="{% url 'login' %}">Логин</a></li>
+                <li {% block register %}{% endblock register %}><a href="{% url 'register' %}">Регистрация</a></li>
                 <li {% block about %}{% endblock about %}><a href="{% url 'about' %}">О проекте</a></li>
                 <li {% block contacts %}{% endblock contacts %}><a href="{% url 'contacts' %}">Контакты</a></li>
             </ul>
         </nav>
 
         <div class="colorlib-footer">
-            <h1 id="colorlib-logo" class="mb-4"><a href="index.html"
+            <h1 id="colorlib-logo" class="mb-4"><a href="{% url 'clear_post' %}"
                                                    style="background-image: url({% static 'arenda_app/images/bg_1.jpg' %});">Арендуй
                 <span>Че-нить!</span></a></h1>
             <p class="pfooter">
@@ -84,8 +86,8 @@
                         <div class="sidebar-box pt-md-4">
                             <form method="post">
                                 {% csrf_token %}
-                                {{ form.as_p }}
-                                <button type="submit">Выбрать</button>
+                                {{ filter_form.as_p }}
+                                <button type="submit" name="filter_form">Выбрать</button>
                             </form>
 
                             <datalist id="cities">
@@ -109,9 +111,9 @@
                                         <div><a href="{% url 'space_detail' space_id=space.id %}"><span
                                                 class="icon-calendar"></span> {{ space.created_tm }}</a>
                                         </div>
-                                        <div><a href="#"><span class="icon-person"></span> {{ space.owner.first_name }}
-                                            {{ space.owner.last_name }}</a></div>
-                                        <div><a href="#"><span class="icon-eye"></span> {{ space.views }}</a></div>
+                                        <div><span class="icon-person"></span> {{ space.owner.first_name }}
+                                            {{ space.owner.last_name }}</div>
+                                        <div><span class="icon-eye"></span> {{ space.views }}</div>
                                     </div>
                                 </div>
                             </div>

@@ -1,0 +1,25 @@
+{% extends 'arenda_app/base.html' %}
+
+{% block register %}class="colorlib-active"{% endblock register %}
+
+{% block title %} :: Регистрация{% endblock title %}
+
+{% block content %}
+    <h2>Регистрация</h2>
+    <form method="post" class="p-3 p-md-5 bg-light" style="width: 100%;" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for p in form %}
+        <div class="form-group">
+            {{ p.label }}
+            {% if p.label == 'Логин:' or p.label == 'Пароль:' or p.label == 'Повтор пароля:' %}
+            <span style="color: red;">*</span>
+            {% endif %}
+                {{ p }}
+        <div style="color: red;">{{ p.errors }}</div>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn py-3 px-4 btn-primary">Ок</button>
+    </form>
+
+
+{% endblock %}

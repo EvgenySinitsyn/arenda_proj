@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
-from .models import City, Space
-from .forms import SelectSpaces
+from .models import City, Space, User
+from django.contrib.auth.views import LoginView
+from .forms import SelectSpaces, RegisterUserForm, LoginUserForm
 from django.shortcuts import get_object_or_404
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
 
 PAGE_LIMIT = 8
 
@@ -15,7 +19,7 @@ def get_side_context():
     popular_spaces = Space.objects.all().order_by('-views')[:2]
     form = SelectSpaces()
     cities = City.objects.all()
-    side_context = {'form': form,
+    side_context = {'filter_form': form,
                     'cities': cities,
                     'popular_spaces': popular_spaces,
                     }
@@ -23,8 +27,10 @@ def get_side_context():
 
 
 def filter_spaces(spaces, post):
-    spaces = spaces.filter(type_id=post['type'])
-    spaces = spaces.filter(rent_type_id=post['rent_type'])
+    if post['type']:
+        spaces = spaces.filter(type_id=post['type'])
+    if post['rent_type']:
+        spaces = spaces.filter(rent_type_id=post['rent_type'])
     spaces = spaces.filter(building__city__name=post['city'])
     if post['rent_type'] == '1':
         if post['price_from']:
@@ -44,15 +50,15 @@ def filter_spaces(spaces, post):
 
 
 def index(request, page=1):
-    side_context = get_side_context()
-    spaces = Space.objects.all().order_by('-views')
     if request.method == 'POST':
         request.session['_old_post'] = request.POST
         return redirect('index')
+    side_context = get_side_context()
+    spaces = Space.objects.all().order_by('-views')
     old_post = request.session.get('_old_post')
     if old_post:
         spaces = filter_spaces(spaces, old_post)
-        side_context['form'] = SelectSpaces(old_post)
+        side_context['filter_form'] = SelectSpaces(old_post)
     page_spaces = spaces[(page - 1) * PAGE_LIMIT:((page - 1) * PAGE_LIMIT) + PAGE_LIMIT]
     page_count = len(spaces) // PAGE_LIMIT + 1
     context = {'spaces': page_spaces,
@@ -65,6 +71,9 @@ def index(request, page=1):
 
 
 def space_detail(request, space_id):
+    if request.method == 'POST':
+        request.session['_old_post'] = request.POST
+        return redirect('index')
     side_context = get_side_context()
     if request.method == 'GET':
         space = get_object_or_404(Space, id=space_id)
@@ -78,10 +87,54 @@ def space_detail(request, space_id):
 
 
 def contacts(request):
+    if request.method == 'POST':
+        request.session['_old_post'] = request.POST
+        return redirect('index')
     context = get_side_context()
     return render(request, template_name='arenda_app/contacts.html', context=context)
 
 
 def about(request):
+    if request.method == 'POST':
+        request.session['_old_post'] = request.POST
+        return redirect('index')
     context = get_side_context()
     return render(request, template_name='arenda_app/about.html', context=context)
+
+
+class RegisterUserView(CreateView):
+    model = User
+    form_class = RegisterUserForm
+    template_name = 'arenda_app/register.html'
+    success_url = reverse_lazy('index')
+
+    def post(self, request, *args, **kwargs):
+        if 'filter_form' in request.POST:
+            request.session['_old_post'] = request.POST
+            return redirect('index')
+        return super().post()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context = {**context, **get_side_context()}
+        return context
+
+
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'arenda_app/login.html'
+
+    def post(self, request, *args, **kwargs):
+        if 'filter_form' in request.POST:
+            request.session['_old_post'] = request.POST
+            return redirect('index')
+        return super().post()
+
+    def get_success_url(self):
+        url = reverse_lazy('index')
+        return url
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data()
+        context = {**context, **get_side_context()}
+        return context

@@ -1,0 +1,25 @@
+{% extends 'arenda_app/base.html' %}
+
+{% load static %}
+
+{% block login %}class="colorlib-active"{% endblock login %}
+
+{% block title %} :: Login{% endblock title %}
+
+{% block content %}
+    <h2>Логин</h2>
+    <form method="post" class="p-3 p-md-5 bg-light" style="width: 100%;" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="color: red;">{{ form.non_field_errors }}</div>
+        {% for p in form %}
+        <div class="form-group">
+            {{ p.label }}
+            {{ p }}
+
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn py-3 px-4 btn-primary" id="btn_ok">Ок</button>
+    </form>
+
+
+{% endblock content %}
