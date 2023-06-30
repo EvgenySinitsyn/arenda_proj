@@ -47,27 +47,27 @@
 			event.preventDefault();
 			var $this = $(this);
 
-			if ($('body').hasClass('offcanvas')) {
+			if ($('body').hasClass('offcanva')) {
 				$this.removeClass('active');
-				$('body').removeClass('offcanvas');	
+				$('body').removeClass('offcanva');
 			} else {
 				$this.addClass('active');
-				$('body').addClass('offcanvas');	
+				$('body').addClass('offcanva');
 			}
 		});
 	};
 	burgerMenu();
 
-	// Click outside of offcanvass
+	// Click outside of offcanva
 	var mobileMenuOutsideClick = function() {
 
 		$(document).click(function (e) {
 	    var container = $("#colorlib-aside, .js-colorlib-nav-toggle");
 	    if (!container.is(e.target) && container.has(e.target).length === 0) {
 
-	    	if ( $('body').hasClass('offcanvas') ) {
+	    	if ( $('body').hasClass('offcanva') ) {
 
-    			$('body').removeClass('offcanvas');
+    			$('body').removeClass('offcanva');
     			$('.js-colorlib-nav-toggle').removeClass('active');
 			
 	    	}
@@ -76,9 +76,9 @@
 		});
 
 		$(window).scroll(function(){
-			if ( $('body').hasClass('offcanvas') ) {
+			if ( $('body').hasClass('offcanva') ) {
 
-    			$('body').removeClass('offcanvas');
+    			$('body').removeClass('offcanva');
     			$('.js-colorlib-nav-toggle').removeClass('active');
 			
 	    	}

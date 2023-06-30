@@ -46,7 +46,7 @@ body {
 	line-height: 1.8;
 	font-weight: 400;
 	color: lighten($black,40%);
-	&.offcanvas {
+	&.offcanva {
 		overflow-x: hidden;
 		#colorlib-aside {
 			@include translateX(0);

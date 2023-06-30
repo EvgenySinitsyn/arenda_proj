@@ -8139,9 +8139,9 @@ body {
   line-height: 1.8;
   font-weight: 400;
   color: #666666; }
-  body.offcanvas {
+  body.offcanva {
     overflow-x: hidden; }
-    body.offcanvas #colorlib-aside {
+    body.offcanva #colorlib-aside {
       -moz-transform: translateX(0);
       -webkit-transform: translateX(0);
       -ms-transform: translateX(0);
@@ -8151,7 +8151,7 @@ body {
       background: #fff;
       z-index: 999;
       position: fixed; }
-    body.offcanvas #colorlib-main, body.offcanvas .colorlib-nav-toggle {
+    body.offcanva #colorlib-main, body.offcanva .colorlib-nav-toggle {
       top: 0;
       -moz-transform: translateX(270px);
       -webkit-transform: translateX(270px);
