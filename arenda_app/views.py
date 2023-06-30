@@ -112,7 +112,7 @@ class RegisterUserView(CreateView):
         if 'filter_form' in request.POST:
             request.session['_old_post'] = request.POST
             return redirect('index')
-        return super().post()
+        return super().post(request)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data()
@@ -128,7 +128,7 @@ class LoginUser(LoginView):
         if 'filter_form' in request.POST:
             request.session['_old_post'] = request.POST
             return redirect('index')
-        return super().post()
+        return super().post(request)
 
     def get_success_url(self):
         url = reverse_lazy('index')
