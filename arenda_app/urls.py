@@ -7,4 +7,6 @@ urlpatterns = [
     path('clear_post', views.clear_post, name='clear_post'),
     path('<int:page>', views.index, name='index'),
     path('spaces/<int:space_id>', views.space_detail, name='space_detail'),
+    path('about', views.about, name='about'),
+    path('contacts', views.contacts, name='contacts'),
 ]

@@ -2,9 +2,10 @@
 
 {% load static %}
 
+{% block home %}class="colorlib-active"{% endblock home %}
+
 {% block content %}
-<div class="col-xl-8 py-5 px-md-5">
-<div class="row pt-md-4">
+
     {% for space in spaces %}
     <div class="col-md-12">
         <div class="blog-entry ftco-animate d-md-flex">
@@ -22,29 +23,35 @@
                         <span><i class="icon-eye mr-2"></i>{{ space.views }} просмотров</span>
                     </p>
                 </div>
-                <p class="mb-4">{{ space.description }}</p>
                 <p><a href="{% url 'space_detail' space_id=space.id %}" class="btn-custom">Посмотреть подробнее <span
                         class="ion-ios-arrow-forward"></span></a></p>
             </div>
         </div>
     </div>
     {% endfor %}
-</div><!-- END-->
+<!-- END-->
 <div class="row">
     <div class="col">
         <div class="block-27">
             <ul>
-                {% for page in page_count %}
-                {% if page == current_page %}
-                    <li class="active"><span>{{ page }}</span></li>
-                {% else %}
-                    <li><a href="{% url 'index' page=page %}">{{ page }}</a></li>
+                {% if current_page > 1 %}
+                <li><a href="{% url 'index' page=current_page|add:-1 %}">&lt;</a></li>
                 {% endif %}
+
+                {% for page in page_count %}
+                    {% if page == current_page %}
+                        <li class="active"><span>{{ page }}</span></li>
+                    {% else %}
+                        <li><a href="{% url 'index' page=page %}">{{ page }}</a></li>
+                    {% endif %}
                 {% endfor %}
 
+                {% if current_page < pages_amount %}
+                <li><a href="{% url 'index' page=current_page|add:1 %}">></a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </div>
-</div>
-{% endblock %}
+
+{% endblock content %}

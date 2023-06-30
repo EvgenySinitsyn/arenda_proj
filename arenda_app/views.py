@@ -1,12 +1,10 @@
-from django.db.models.functions import Coalesce
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import City, Space, SpaceImage
 from .forms import SelectSpaces
 from django.shortcuts import get_object_or_404
 
 
-PAGE_LIMIT = 3
+PAGE_LIMIT = 8
 
 
 def clear_post(request):
@@ -60,6 +58,7 @@ def index(request, page=1):
                'spaces': page_spaces,
                'popular_spaces': popular_spaces,
                'page_count': range(1, page_count + 1),
+               'pages_amount': page_count,
                'current_page': page,
                }
     return render(request, template_name='arenda_app/index.html', context=context)
@@ -79,3 +78,21 @@ def space_detail(request, space_id):
                'popular_spaces': popular_spaces,
                }
     return render(request, template_name='arenda_app/single.html', context=context)
+
+
+def contacts(request):
+    popular_spaces, form, cities = get_side_objects()
+    context = {'form': form,
+               'cities': cities,
+               'popular_spaces': popular_spaces,
+               }
+    return render(request, template_name='arenda_app/contacts.html', context=context)
+
+
+def about(request):
+    popular_spaces, form, cities = get_side_objects()
+    context = {'form': form,
+               'cities': cities,
+               'popular_spaces': popular_spaces,
+               }
+    return render(request, template_name='arenda_app/about.html', context=context)

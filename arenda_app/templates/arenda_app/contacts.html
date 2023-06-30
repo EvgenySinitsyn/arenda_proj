@@ -1,0 +1,42 @@
+{% extends 'arenda_app/base.html' %}
+
+{% load static %}
+
+{% block contacts %}class="colorlib-active"{% endblock contacts %}
+
+{% block content %}
+<h1 class="mb-4">Над сайтом работали студенты группы УБВТ 2101 МТУСИ</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md">
+      <div class="card">
+        <img src="{% static 'arenda_app/our_photos/Evgen.png' %}" class="card-img-top" alt="Fissure in Sandstone"/>
+        <div class="card-body">
+          <h5 class="card-title">Синицын Евгений</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <img src="{% static 'arenda_app/our_photos/Katya.png' %}" class="card-img-top" alt="Fissure in Sandstone"/>
+        <div class="card-body">
+          <h5 class="card-title">Устюжанина Екатерина</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <img src="{% static 'arenda_app/our_photos/Den.png' %}" class="card-img-top" alt="Fissure in Sandstone"/>
+        <div class="card-body">
+          <h5 class="card-title">Косевской Денис</h5>
+          <p class="card-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

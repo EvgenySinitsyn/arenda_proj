@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-<div class="col-lg-8 px-md-5 py-5">
+<!--<div class="col-lg-8 px-md-5 py-5">-->
     <!-- Carousel wrapper -->
 <div id="carouselDarkVariant" class="carousel slide carousel-fade carousel-dark" data-mdb-ride="carousel">
   <!-- Indicators -->
@@ -47,13 +47,13 @@
   </button>
 </div>
 <!-- Carousel wrapper -->
-    <div class="row pt-md-4">
-
-        <h1 class="mb-3">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</h1>
-        <h4>Описание:</h4>
-        <p>{{ space.description }}</p>
 
 
-    </div>
-</div><!-- END-->
+<h1 class="mb-3">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</h1>
+<h4>Описание:</h4>
+<p>{{ space.description }}</p>
+
+
+
+<!--</div>&lt;!&ndash; END&ndash;&gt;-->
 {% endblock content %}
