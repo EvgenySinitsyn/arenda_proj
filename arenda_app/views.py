@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from .models import City, Space, SpaceImage
+from .models import City, Space
 from .forms import SelectSpaces
 from django.shortcuts import get_object_or_404
-
 
 PAGE_LIMIT = 8
 
@@ -12,11 +11,15 @@ def clear_post(request):
     return redirect('index')
 
 
-def get_side_objects():
+def get_side_context():
     popular_spaces = Space.objects.all().order_by('-views')[:2]
     form = SelectSpaces()
     cities = City.objects.all()
-    return popular_spaces, form, cities
+    side_context = {'form': form,
+                    'cities': cities,
+                    'popular_spaces': popular_spaces,
+                    }
+    return side_context
 
 
 def filter_spaces(spaces, post):
@@ -41,7 +44,7 @@ def filter_spaces(spaces, post):
 
 
 def index(request, page=1):
-    popular_spaces, form, cities = get_side_objects()
+    side_context = get_side_context()
     spaces = Space.objects.all().order_by('-views')
     if request.method == 'POST':
         request.session['_old_post'] = request.POST
@@ -49,50 +52,36 @@ def index(request, page=1):
     old_post = request.session.get('_old_post')
     if old_post:
         spaces = filter_spaces(spaces, old_post)
-        form = SelectSpaces(old_post)
-
-    page_spaces = spaces[(page-1) * PAGE_LIMIT:((page-1) * PAGE_LIMIT) + PAGE_LIMIT]
+        side_context['form'] = SelectSpaces(old_post)
+    page_spaces = spaces[(page - 1) * PAGE_LIMIT:((page - 1) * PAGE_LIMIT) + PAGE_LIMIT]
     page_count = len(spaces) // PAGE_LIMIT + 1
-    context = {'form': form,
-               'cities': cities,
-               'spaces': page_spaces,
-               'popular_spaces': popular_spaces,
+    context = {'spaces': page_spaces,
                'page_count': range(1, page_count + 1),
                'pages_amount': page_count,
                'current_page': page,
                }
+    context = {**context, **side_context}
     return render(request, template_name='arenda_app/index.html', context=context)
 
 
 def space_detail(request, space_id):
-    popular_spaces, form, cities = get_side_objects()
+    side_context = get_side_context()
     if request.method == 'GET':
         space = get_object_or_404(Space, id=space_id)
         space.views += 1
         space.save()
-
-    context = {'form': form,
-               'cities': cities,
-               'space': space,
+    context = {'space': space,
                'images': space.images.all(),
-               'popular_spaces': popular_spaces,
                }
+    context = {**context, **side_context}
     return render(request, template_name='arenda_app/single.html', context=context)
 
 
 def contacts(request):
-    popular_spaces, form, cities = get_side_objects()
-    context = {'form': form,
-               'cities': cities,
-               'popular_spaces': popular_spaces,
-               }
+    context = get_side_context()
     return render(request, template_name='arenda_app/contacts.html', context=context)
 
 
 def about(request):
-    popular_spaces, form, cities = get_side_objects()
-    context = {'form': form,
-               'cities': cities,
-               'popular_spaces': popular_spaces,
-               }
+    context = get_side_context()
     return render(request, template_name='arenda_app/about.html', context=context)
