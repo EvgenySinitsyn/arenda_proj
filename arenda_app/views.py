@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
 
 
 PAGE_LIMIT = 8
@@ -168,7 +166,8 @@ def add_space(request):
             context['stage'] = 'building'
             context['text'] = 'Введите адрес'
             context['cities'] = City.objects.all()
-            context['buildings'] = Building.objects.all()
+            context['streets'] = Building.objects.values('street').distinct()
+            context['numbers'] = Building.objects.values('number').distinct()
             context['building_form'] = BuildingForm
             return render(request, 'arenda_app/add_space.html', context)
         _add_space = request.session.get('_add_space')

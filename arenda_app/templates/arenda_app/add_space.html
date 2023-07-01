@@ -16,7 +16,7 @@
         {{ p }}
         </div>
         {% endfor %}
-        <button type="submit" name="building_form">Далее</button>
+        <button type="submit" name="building_form" class="btn py-3 px-4 btn-primary" id="btn_ok">Далее</button>
     </form>
 
     <datalist id="cities">
@@ -26,14 +26,14 @@
     </datalist>
 
     <datalist id="streets">
-        {% for building in buildings %}
-        <option value="{{ building.street }}"></option>
+        {% for item in streets %}
+        <option value="{{ item.street }}"></option>
         {% endfor %}
     </datalist>
 
     <datalist id="numbers">
-        {% for building in buildings %}
-        <option value="{{ building.number }}"></option>
+        {% for item in numbers%}
+        <option value="{{ item.number }}"></option>
         {% endfor %}
     </datalist>
 
@@ -51,7 +51,7 @@
             <label>Загрузить изображения</label>
             <input required name="images" type="file" multiple class="form-control-file">
         </div>
-        <button type="submit" name="space_form">Далее</button>
+        <button type="submit" name="space_form" class="btn py-3 px-4 btn-primary" id="btn_ok">Далее</button>
     </form>
 {% endif %}
 {% endblock content %}
