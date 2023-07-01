@@ -50,8 +50,24 @@
 
 
 <h1 class="mb-3">{{ space.building.city }}, ул.{{ space.building.street }}, д.{{ space.building.number }}</h1>
-<h4>Описание:</h4>
+<p>Размещено {{ space.created_tm }}</p>
+<h5>Тип помещения: {{ space.type }}</h5>
+<h5>Цена:
+    {% if space.rent_type == 'Посуточно' %}
+    {{ space.day_price|floatformat:"0" }}
+    {% else %}
+    {{ space.month_price|floatformat:"0" }}
+    {% endif %} руб.
+</h5>
+<h5>Тип аренды: {{ space.rent_type }}</h5>
+<h5>Разместил: {{ space.owner.first_name }}</h5>
+<h5>Телефон: {{ space.owner.phone }}</h5>
+<h5>Описание: </h5>
 <p>{{ space.description }}</p>
+
+
+
+
 
 
 

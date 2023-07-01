@@ -1,7 +1,6 @@
 from django import forms
-from .models import SpaceType, RentType, User
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.forms import AuthenticationForm
+from .models import SpaceType, RentType, User, Space, SpaceImage, Building, City
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
 
@@ -36,11 +35,6 @@ class SelectSpaces(forms.Form):
                                     required=False)
 
 
-class LoginUserForm(AuthenticationForm):
-    username = forms.CharField(label='Логин:', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Пароль:', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
-
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(label='Логин:', widget=forms.TextInput(attrs={'class': 'form-control'}))
     password1 = forms.CharField(label='Пароль:', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -53,3 +47,28 @@ class RegisterUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2', 'phone')
+
+
+# class CityForm(forms.Form):
+#     city = forms.CharField(label='Город', widget=forms.TextInput(attrs={'list': 'cities', 'placeholder': 'Москва'}))
+
+class BuildingForm(forms.ModelForm):
+    city = forms.CharField(label='Город', widget=forms.TextInput(attrs={'list': 'cities', 'placeholder': 'Москва', 'class': 'form-control'}))
+    street = forms.CharField(label='Улица', widget=forms.TextInput(attrs={'list': 'streets', 'class': 'form-control'}))
+    number = forms.CharField(label='Дом', widget=forms.TextInput(attrs={'list': 'numbers', 'class': 'form-control'}))
+
+    class Meta:
+        model = Building
+        fields = ('city', 'street', 'number')
+
+
+class SpaceForm(forms.ModelForm):
+    type = forms.ModelChoiceField(label='Тип помещения', queryset=SpaceType.objects.all())
+    rent_type = forms.ModelChoiceField(label='Срок аренды', queryset=RentType.objects.all())
+
+    class Meta:
+        model = Space
+        exclude = ('building', 'owner', 'views')
+
+
+

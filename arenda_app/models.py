@@ -15,7 +15,7 @@ class User(AbstractUser):
 
 
 class City(models.Model):
-    name = models.CharField(verbose_name='Название', max_length=100)
+    name = models.CharField(verbose_name='Название', max_length=100, unique=True)
     created_tm = models.DateTimeField(verbose_name='Время создания', auto_now=True)
 
     def __str__(self):
@@ -41,6 +41,7 @@ class Building(models.Model):
     class Meta:
         verbose_name = 'Здание'
         verbose_name_plural = 'Здания'
+        unique_together = ('city', 'street', 'number')
 
 
 class SpaceType(models.Model):
