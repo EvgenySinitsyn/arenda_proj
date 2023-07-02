@@ -158,6 +158,7 @@ def logout_user(request):
     return redirect('index')
 
 
+@login_required(login_url='login')
 def add_space(request):
     context = get_side_context()
     if request.method == 'GET':
